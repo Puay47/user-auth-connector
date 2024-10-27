@@ -1,11 +1,23 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
+  const { logout } = useAuth();
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="min-h-screen p-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold">Welcome to Dashboard</h1>
+          <Button onClick={logout} variant="outline">
+            Logout
+          </Button>
+        </div>
+        <div className="bg-white rounded-lg shadow p-6">
+          <p className="text-lg text-gray-600">
+            You are successfully logged in! This is your protected dashboard.
+          </p>
+        </div>
       </div>
     </div>
   );
