@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
+import { verifyCredentials } from '@/services/database';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -26,26 +27,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = async (username: string, password: string) => {
     try {
       setLoading(true);
-      // Here you would typically make an API call to your RDS database
-      // For now, we'll simulate the authentication
-      const response = await new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (username === 'admin' && password === 'password') {
-            resolve({ token: 'dummy-jwt-token' });
-          } else {
-            reject(new Error('Invalid credentials'));
-          }
-        }, 1000);
-      });
-
-      // @ts-ignore - we know response has token
-      localStorage.setItem('token', response.token);
-      setIsAuthenticated(true);
-      toast({
-        title: "Success!",
-        description: "You have successfully logged in.",
-      });
-      navigate('/');
+      const isValid = await verifyCredentials(username, password);
+      
+      if (isValid) {
+        const token = 'dummy-jwt-token'; // In production, generate a proper JWT token
+        localStorage.setItem('token', token);
+        setIsAuthenticated(true);
+        toast({
+          title: "Success!",
+          description: "You have successfully logged in.",
+        });
+        navigate('/');
+      } else {
+        throw new Error('Invalid credentials');
+      }
     } catch (error) {
       toast({
         variant: "destructive",
