@@ -7,7 +7,7 @@ import {
   ExecuteStatementCommand,
 } from "@aws-sdk/client-rds-data";
 
-const SECRET_NAME = "rds!db-21aefa70-9fb5-40d3-b165-3063dff891ba";
+const SECRET_NAME = "rds-db-credentials/db-OEWCEVTJBVV4DDKAUJJALWUSIU/postgres/1730018575601";
 
 interface DatabaseCredentials {
   username: string;
