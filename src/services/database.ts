@@ -2,7 +2,10 @@ import {
   SecretsManagerClient,
   GetSecretValueCommand,
 } from "@aws-sdk/client-secrets-manager";
-import { RDSClient, ExecuteStatementCommand } from "@aws-sdk/client-rds";
+import {
+  RDSDataClient,
+  ExecuteStatementCommand,
+} from "@aws-sdk/client-rds-data";
 
 const SECRET_NAME = "rds!db-21aefa70-9fb5-40d3-b165-3063dff891ba";
 
@@ -42,7 +45,7 @@ export async function verifyCredentials(username: string, password: string): Pro
   try {
     const credentials = await getDatabaseCredentials();
     
-    const rdsClient = new RDSClient({
+    const rdsClient = new RDSDataClient({
       region: "us-east-1",
       credentials: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
@@ -64,7 +67,7 @@ export async function verifyCredentials(username: string, password: string): Pro
     const command = new ExecuteStatementCommand(params);
     const result = await rdsClient.send(command);
 
-    return result.records && result.records.length > 0;
+    return result.records ? result.records.length > 0 : false;
   } catch (error) {
     console.error("Error verifying credentials:", error);
     throw error;
